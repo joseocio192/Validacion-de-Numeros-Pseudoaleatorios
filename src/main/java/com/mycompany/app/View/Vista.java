@@ -48,6 +48,30 @@ public class Vista extends JFrame {
             }
         });
 
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(Vista.this, "Ejecutando...");
+                Modelo.kolmogorov_Smirnov(numeros);
+            }
+        });
+
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(Vista.this, "Ejecutando...");
+                Modelo.series(numeros);
+            }
+        });
+
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(Vista.this, "Ejecutando...");
+                Modelo.distancias(numeros);
+            }
+        });
+
         openItem.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             int returnValue = fileChooser.showOpenDialog(null);
