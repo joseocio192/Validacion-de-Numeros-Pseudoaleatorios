@@ -35,6 +35,14 @@ public class Vista extends JFrame {
             }
         });
 
+        openItem.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                JOptionPane.showMessageDialog(Vista.this, "File selected: " + fileChooser.getSelectedFile().getName());
+            }
+        });
+
         JPanel textPanel = new JPanel();
         JLabel label = new JLabel("Proyecto Simulacion");
         textPanel.add(label);
