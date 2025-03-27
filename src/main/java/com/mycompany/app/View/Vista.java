@@ -2,13 +2,9 @@ package com.mycompany.app.View;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import com.mycompany.app.Controller.Controller;
-import com.mycompany.app.Model.Modelo;
-import com.mycompany.app.View.ButtonActionListener;
 
 public class Vista extends JFrame {
     public ArrayList<Float> numeros;
@@ -42,7 +38,6 @@ public class Vista extends JFrame {
         panel.add(button3);
         panel.add(button4);
 
-        // Use the new ButtonActionListener class
         button.addActionListener(new ButtonActionListener(this, "jiCuadrado"));
         button2.addActionListener(new ButtonActionListener(this, "kolmogorovSmirnov"));
         button3.addActionListener(new ButtonActionListener(this, "series"));
@@ -53,6 +48,9 @@ public class Vista extends JFrame {
             int returnValue = fileChooser.showOpenDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 numeros = Controller.procesarArchivo(fileChooser.getSelectedFile().getAbsolutePath());
+            }
+            if (numeros == null) {
+                JOptionPane.showMessageDialog(null, "No se pudo procesar el archivo", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
