@@ -1,10 +1,7 @@
 package com.mycompany.app;
-
-/**
- * Hello world!
- */
+import com.mycompany.app.View.Vista;
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Vista.main(args);
     }
 }
