@@ -28,7 +28,23 @@ public class ButtonActionListener implements ActionListener {
                 Modelo.series(vista.numeros);
                 break;
             case "distancias":
-                Modelo.distancias(vista.numeros);
+                String input;
+                double number = 0;
+                boolean validInput = false;
+                do {
+                    input = JOptionPane.showInputDialog(vista, "Ingrese θ:", "Entrada requerida", JOptionPane.PLAIN_MESSAGE);
+                    if (input == null) {
+                        return; // Cancel or close dialog
+                    }
+                    try {
+                        number = Double.parseDouble(input);
+                        validInput = true;
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(vista, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } while (!validInput);
+
+                Modelo.distancias(vista.numeros, number);
                 break;
             default:
                 throw new IllegalArgumentException("Acción no reconocida: " + action);
