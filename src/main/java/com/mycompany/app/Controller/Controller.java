@@ -19,11 +19,11 @@ import com.opencsv.exceptions.CsvValidationException;
 public class Controller {
     public static ArrayList<Float> procesarArchivo(String path) {
         System.out.println("Procesando archivo: " + path);
-        if (path.endsWith(".csv") || path.endsWith(".CSV")) {
+        if (path.toLowerCase().endsWith(".csv")) {
             return procesarArchivoCSV(path);
         }
 
-        if (path.endsWith(".xlsx") || path.endsWith(".XLSX")) {
+        if (path.toLowerCase().endsWith(".xlsx")) {
             return procesarArchivoExcel(path);
         }
         return null;

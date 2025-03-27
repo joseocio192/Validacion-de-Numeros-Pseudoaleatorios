@@ -1,7 +1,11 @@
 package com.mycompany.app.View;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 import com.mycompany.app.Controller.Controller;
@@ -33,6 +37,7 @@ public class Vista extends JFrame {
         JButton button2 = new JButton("Prueba Kolmogorov-Smirnov");
         JButton button3 = new JButton("Prueba de las Series");
         JButton button4 = new JButton("Prueba de las Distancias");
+        disableButtons(button, button2, button3, button4);
         panel.add(button);
         panel.add(button2);
         panel.add(button3);
@@ -45,12 +50,18 @@ public class Vista extends JFrame {
 
         openItem.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("csv and xlsx files", "csv", "xlsx"));
             int returnValue = fileChooser.showOpenDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 numeros = Controller.procesarArchivo(fileChooser.getSelectedFile().getAbsolutePath());
             }
             if (numeros == null) {
                 JOptionPane.showMessageDialog(null, "No se pudo procesar el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                button.setEnabled(true);
+                button2.setEnabled(true);
+                button3.setEnabled(true);
+                button4.setEnabled(true);
             }
         });
 
@@ -66,5 +77,12 @@ public class Vista extends JFrame {
         add(textPanel, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    private void disableButtons(JButton button, JButton button2, JButton button3, JButton button4) {
+        button.setEnabled(false);
+        button2.setEnabled(false);
+        button3.setEnabled(false);
+        button4.setEnabled(false);
     }
 }
