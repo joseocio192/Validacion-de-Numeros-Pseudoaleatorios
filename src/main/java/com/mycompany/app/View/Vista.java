@@ -4,10 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import com.mycompany.app.Controller.Controller;
+import com.mycompany.app.Model.Modelo;
 
 public class Vista extends JFrame {
+    public ArrayList<Float> numeros;
 
     public Vista() {
+        numeros = new ArrayList<Float>();
         Interfaz();
     }
 
@@ -38,6 +44,7 @@ public class Vista extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(Vista.this, "Ejecutando...");
+                Modelo.ji_Cuadrado(numeros);
             }
         });
 
@@ -46,8 +53,11 @@ public class Vista extends JFrame {
             int returnValue = fileChooser.showOpenDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 JOptionPane.showMessageDialog(Vista.this, "File selected: " + fileChooser.getSelectedFile().getName());
+                numeros = Controller.procesarArchivo(fileChooser.getSelectedFile().getAbsolutePath());
             }
         });
+
+        exitItem.addActionListener(e -> System.exit(0));
 
         JPanel textPanel = new JPanel();
         JLabel label = new JLabel("Pruebas para muestras de números aleatorios");

@@ -1,11 +1,37 @@
 package com.mycompany.app.Model;
 
+import java.util.ArrayList;
+
 public class Modelo {
-    public Modelo(Integer[] numeros) {
+    public Modelo(ArrayList<Float> numeros) {
         System.out.println("Modelo creado");
     }
 
-    public void metodo1(Integer[] numeros) {
+    public static void ji_Cuadrado(ArrayList<Float> numeros) {
         System.out.println("Metodo 1"); 
+        while (numeros.size() > 0) {
+            System.out.println("Número: " + numeros.remove(0));
+        }
+    }
+
+    public static void kolmogorov_Smirnov(ArrayList<Float> numeros) {
+        System.out.println("Metodo 1"); 
+        while (numeros.size() > 0) {
+            System.out.println("Número: " + numeros.remove(0));
+        }
+    }
+
+    public static void series(ArrayList<Float> numeros) {
+        System.out.println("Metodo 1"); 
+        while (numeros.size() > 0) {
+            System.out.println("Número: " + numeros.remove(0));
+        }
+    }
+
+    public static void distancias(ArrayList<Float> numeros) {
+        System.out.println("Metodo 1"); 
+        while (numeros.size() > 0) {
+            System.out.println("Número: " + numeros.remove(0));
+        }
     }
 }
