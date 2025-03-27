@@ -5,16 +5,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Vista {
+public class Vista extends JFrame {
 
-    // Main function
-    public static void main(String[] args) {
-        // Create the main frame
-        JFrame frame = new JFrame("JFrame Example");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+    public Vista() {
+        Interfaz();
+    }
 
-        // Create a menu bar
+    public void Interfaz() {
+        setTitle("JFrame Example");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem openItem = new JMenuItem("Open");
@@ -24,30 +25,25 @@ public class Vista {
         fileMenu.add(exitItem);
         menuBar.add(fileMenu);
 
-        // Create a panel with a button
         JPanel panel = new JPanel();
-        JButton button = new JButton("Click Me");
+        JButton button = new JButton("Metodo 1");
         panel.add(button);
-
-        // Add action to the button
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Button Clicked!");
+                JOptionPane.showMessageDialog(Vista.this, "Ejecutando...");
             }
         });
 
-        // Create another panel with text
         JPanel textPanel = new JPanel();
-        JLabel label = new JLabel("Geeks Premier League 2023");
+        JLabel label = new JLabel("Proyecto Simulacion");
         textPanel.add(label);
 
-        // Set layout for the main frame
-        frame.setLayout(new BorderLayout());
-        frame.setJMenuBar(menuBar);
-        frame.add(panel, BorderLayout.CENTER);
-        frame.add(textPanel, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        setJMenuBar(menuBar);
+        add(panel, BorderLayout.CENTER);
+        add(textPanel, BorderLayout.SOUTH);
 
-        frame.setVisible(true);
+        setVisible(true);
     }
 }
