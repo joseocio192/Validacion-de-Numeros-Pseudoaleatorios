@@ -12,22 +12,28 @@ public class Vista extends JFrame {
     }
 
     public void Interfaz() {
-        setTitle("JFrame Example");
+        setTitle("Proyecto Simulacion");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
 
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem openItem = new JMenuItem("Open");
-        JMenuItem exitItem = new JMenuItem("Exit");
+        JMenu fileMenu = new JMenu("Menu");
+        JMenuItem openItem = new JMenuItem("Abrir");
+        JMenuItem exitItem = new JMenuItem("Salir");
         fileMenu.add(openItem);
         fileMenu.addSeparator();
         fileMenu.add(exitItem);
         menuBar.add(fileMenu);
 
         JPanel panel = new JPanel();
-        JButton button = new JButton("Metodo 1");
+        JButton button = new JButton("Prueba Ji-Cuadrado");
+        JButton button2 = new JButton("Prueba Kolmogorov-Smirnov");
+        JButton button3 = new JButton("Prueba de las Series");
+        JButton button4 = new JButton("Prueba de las Distancias");
         panel.add(button);
+        panel.add(button2);
+        panel.add(button3);
+        panel.add(button4);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,7 +50,7 @@ public class Vista extends JFrame {
         });
 
         JPanel textPanel = new JPanel();
-        JLabel label = new JLabel("Proyecto Simulacion");
+        JLabel label = new JLabel("Pruebas para muestras de números aleatorios");
         textPanel.add(label);
 
         setLayout(new BorderLayout());
