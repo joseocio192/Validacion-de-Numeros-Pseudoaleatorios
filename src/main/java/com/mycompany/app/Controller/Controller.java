@@ -6,13 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.mycompany.app.Model.Modelo;
+import com.mycompany.app.View.Vista;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -90,5 +92,41 @@ public class Controller {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void procesarDistancias(Vista vista) {
+        String input;
+        float alpha = 0;
+        float theta = 0;
+        boolean validInput = false;
+        do {
+            input = JOptionPane.showInputDialog(vista, "Ingrese Alpha:", "Entrada requerida",
+                    JOptionPane.PLAIN_MESSAGE);
+            if (input == null) {
+                return; // Cancel or close dialog
+            }
+            try {
+                alpha = Float.parseFloat(input);
+                validInput = true;
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(vista, "Por favor, ingrese un número válido.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } while (!validInput);
+        do {
+            input = JOptionPane.showInputDialog(vista, "Ingrese theta:", "Entrada requerida",
+                    JOptionPane.PLAIN_MESSAGE);
+            if (input == null) {
+                return; // Cancel or close dialog
+            }
+            try {
+                theta = Float.parseFloat(input);
+                validInput = true;
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(vista, "Por favor, ingrese un número válido.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } while (!validInput);
+        Modelo.distancias(vista.numeros, alpha, theta);
     }
 }
