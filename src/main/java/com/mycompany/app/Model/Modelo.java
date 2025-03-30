@@ -11,10 +11,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.jfree.data.xy.XYSeries;
+
 import com.mycompany.app.View.GraficaJiCuadrado;
+import com.mycompany.app.View.LineChartkolmogorov_Smirnov;
 import com.mycompany.app.View.TablaDistancias;
 import com.mycompany.app.View.TablaDistancias2;
 import com.mycompany.app.View.TablaJiCuadrado;
+import com.mycompany.app.View.TablaKolmogorv;
 
 public class Modelo {
 
@@ -85,20 +89,37 @@ public class Modelo {
     }
 
     public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error) {
-        System.out.println("Metodo 2");
         int serie = numeros.size();
         double Fn = 1.0 / serie;
         float D = 0;
 
+        ArrayList<RenglonKolmogorov> tabla = new ArrayList<>();
+
         for (int i = 0; i < serie; i++) {
+            RenglonKolmogorov r = new RenglonKolmogorov();
             float Fni = (i + 1f) / serie;
             float Di = Math.abs(Fni - numeros.get(i));
             if (Di > D) {
                 D = Di;
             }
+            r.setDi(Di);
+            r.setFi(Fni);
+            r.setI(i+1);
+            r.setUi(numeros.get(i));
+            tabla.add(r);
         }
+        new TablaKolmogorv(tabla);
         System.out.println("Error: " + error);
-
+        XYSeries series1 = new XYSeries("Datos reales");
+        XYSeries series2 = new XYSeries("Línea de referencia");
+        for (RenglonKolmogorov renglonKolmogorov : tabla) {
+            series1.add(renglonKolmogorov.getFi(), renglonKolmogorov.getUi());
+            series2.add(renglonKolmogorov.getUi(), renglonKolmogorov.getUi());
+        }
+        SwingUtilities.invokeLater(() -> {
+            LineChartkolmogorov_Smirnov example = new LineChartkolmogorov_Smirnov(series1,series2);
+            example.setVisible(true);
+        });
         float Dx;
         if (error == 0.10f) {
             Dx = (float) (1.22 / Math.sqrt(serie));
@@ -343,7 +364,7 @@ public class Modelo {
         for (Integer a : listaArreglada) {
             System.out.println(a);
         }
-        int max  = getLastConsecutive(listaArreglada) + 1;
+        int max  = getMax(listaArreglada) + 1;
         System.out.println("max"+ max);
         AtomicBoolean x = new AtomicBoolean(true);
         listaUnicos.forEach((n, oi) -> {
@@ -403,12 +424,12 @@ public class Modelo {
         }
     }
 
-    public static int getLastConsecutive(ArrayList<Integer> datos) {
+    public static int getMax(ArrayList<Integer> datos) {
         for (int i = 0; i < datos.size() - 1; i++) {
             if (datos.get(i) + 1 != datos.get(i + 1)) {
-                return datos.get(i); // Return the last consecutive number before the break
+                return datos.get(i);
             }
         }
-        return datos.get(datos.size() - 1); // If no break, return the last element
+        return datos.get(datos.size() - 1);
     }
 }

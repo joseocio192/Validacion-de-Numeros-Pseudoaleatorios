@@ -7,12 +7,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.mycompany.app.Model.RenglonDistancia;
+import com.mycompany.app.Model.RenglonKolmogorov;
 
-public class TablaDistancias extends JFrame {
-    ArrayList<RenglonDistancia> tabla;
+public class TablaKolmogorv extends JFrame {
+    ArrayList<RenglonKolmogorov> tabla;
 
-    public TablaDistancias(ArrayList<RenglonDistancia> tabla) {
+    public TablaKolmogorv(ArrayList<RenglonKolmogorov> tabla) {
         this.tabla = tabla;
         Interfaz();
     };
@@ -21,12 +21,12 @@ public class TablaDistancias extends JFrame {
         setTitle("Tabla distancias");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(300, 600);
-        String[] columns = {"n", "Ui", "C", "i"};
+        String[] columns = {"i", "Ui", "Fi", "Di"};
         DefaultTableModel model = new DefaultTableModel(columns, 0);
-    
-        for (RenglonDistancia row : tabla) {
-            Object iValue = (row.getI() > 0) ? row.getI() : "0";
-            model.addRow(new Object[]{row.getN(), row.getUi(), row.getC(), iValue});
+
+
+        for (RenglonKolmogorov row : tabla) {
+            model.addRow(new Object[]{row.getI(), row.getUi(), row.getFi(), row.getDi()});
         }
     
         JTable table = new JTable(model);
@@ -43,7 +43,6 @@ public class TablaDistancias extends JFrame {
         });
 
         table.setEnabled(false);
-        table.getColumnModel().getColumn(3).setCellRenderer(new MergedCellRenderer(tabla));
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane);
         setVisible(true);
