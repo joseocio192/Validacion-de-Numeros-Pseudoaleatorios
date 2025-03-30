@@ -12,10 +12,24 @@ public class Modelo {
         }
     }
 
-    public static void kolmogorov_Smirnov(ArrayList<Float> numeros) {
-        System.out.println("Metodo 2");
-        while (numeros.size() > 0) {
-            System.out.println("Número: " + numeros.remove(0));
+    public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error ) {
+        System.out.println("Metodo 2"); 
+        int serie = numeros.size();
+        error = 5f;
+        double Fn = 1/serie;
+        float D = 0;
+        for (int i = 0; i < serie; i++) {
+            float Fni =  (float) ((i + 1f) * Fn);
+            float Di = (float) Math.abs(Fni - Fn);
+            if (Di > D) {
+                D = Di;
+            }
+        }
+       float Dx =  1.63f/ (float) Math.sqrt(serie);
+        if (D < Dx) {
+            return "No existe evidencia suficiente para decir que la muestra no esta distribuida uniformemente";
+        } else {
+            return "Existen evidencias suficientes para decir que la muestra no esta distribuida uniformemente"; 
         }
     }
 
