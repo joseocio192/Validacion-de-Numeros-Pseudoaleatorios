@@ -1,13 +1,17 @@
 package com.mycompany.app.Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.mycompany.app.View.GraficaJiCuadrado;
 import com.mycompany.app.View.TablaDistancias;
 import com.mycompany.app.View.TablaJiCuadrado;
+
 public class Modelo {
 
     public static String ji_Cuadrado(ArrayList<Float> numeros) {
@@ -20,7 +24,8 @@ public class Modelo {
         int[] frecuenciasObservadas = new int[k];
         for (double dato : numeros) {
             int indice = (int) (dato / intervalo);
-            if (indice == k) indice--; 
+            if (indice == k)
+                indice--;
             frecuenciasObservadas[indice]++;
         }
 
@@ -32,7 +37,7 @@ public class Modelo {
             double diferencia = frecuenciasObservadas[i] - E;
             double contribucion = (diferencia * diferencia) / E;
             chiCuadrada += contribucion;
-            renglon.setI((i+1)*(intervalo));
+            renglon.setI((i + 1) * (intervalo));
             renglon.setO(frecuenciasObservadas[i]);
             renglon.setE(E);
             renglon.setOme(diferencia);
@@ -41,7 +46,6 @@ public class Modelo {
         }
         new TablaJiCuadrado(tabla);
 
-        
         double[] categorias = new double[tabla.size()];
         for (int i = 0; i < tabla.size(); i++) {
             categorias[i] = tabla.get(i).getI();
@@ -65,24 +69,26 @@ public class Modelo {
         }
     }
 
-     public static double obtenerValorCritico(int gl) {
+    public static double obtenerValorCritico(int gl) {
         Map<Integer, Double> tablaChiCuadrada = Map.ofEntries(
-            Map.entry(1, 3.8415), Map.entry(2, 5.9915), Map.entry(3, 7.8147), Map.entry(4, 9.4877), Map.entry(5, 11.0705),
-            Map.entry(6, 12.5916), Map.entry(7, 14.0671), Map.entry(8, 15.5073), Map.entry(9, 16.9190), Map.entry(10, 18.3070),
-            Map.entry(11, 19.6752), Map.entry(12, 21.0261), Map.entry(13, 22.3620), Map.entry(14, 23.6848), Map.entry(15, 24.9958)
-        );
+                Map.entry(1, 3.8415), Map.entry(2, 5.9915), Map.entry(3, 7.8147), Map.entry(4, 9.4877),
+                Map.entry(5, 11.0705),
+                Map.entry(6, 12.5916), Map.entry(7, 14.0671), Map.entry(8, 15.5073), Map.entry(9, 16.9190),
+                Map.entry(10, 18.3070),
+                Map.entry(11, 19.6752), Map.entry(12, 21.0261), Map.entry(13, 22.3620), Map.entry(14, 23.6848),
+                Map.entry(15, 24.9958));
         return tablaChiCuadrada.getOrDefault(gl, 16.92);
     }
 
-    public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error ) {
-        System.out.println("Metodo 2"); 
+    public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error) {
+        System.out.println("Metodo 2");
         int serie = numeros.size();
         double Fn = 1.0 / serie;
         float D = 0;
 
         for (int i = 0; i < serie; i++) {
             float Fni = (i + 1f) / serie;
-            float Di = Math.abs(Fni - numeros.get(i)); 
+            float Di = Math.abs(Fni - numeros.get(i));
             if (Di > D) {
                 D = Di;
             }
@@ -107,12 +113,136 @@ public class Modelo {
         }
     }
 
-
-    public static void series(ArrayList<Float> numeros) {
-        System.out.println("Metodo 3");
-        while (numeros.size() > 0) {
-            System.out.println("Número: " + numeros.remove(0));
+    public static void series(ArrayList<Float> nums) {
+        System.out.println("Metodo 3 - Prueba de Series");
+        if (nums.size() < 2) {
+            System.out.println("No hay suficientes datos.");
+            return;
         }
+
+        String input = JOptionPane.showInputDialog("Ingrese el valor de n (divisiones del intervalo [0,1]):");
+        int n;
+        try {
+            n = Integer.parseInt(input);
+            if (n <= 0) {
+                System.out.println("El valor de n debe ser mayor que 0.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Valor inválido para n.");
+            return;
+        }
+
+        int N = nums.size() - 1;
+        double intervalo = 1.0 / n;
+
+        double[][] Oij = new double[n][n];
+        for (int i = 0; i < N; i++) {
+            int fila = (int) (nums.get(i) / intervalo);
+            int col = (int) (nums.get(i + 1) / intervalo);
+            if (fila >= n)
+                fila = n - 1;
+            if (col >= n)
+                col = n - 1;
+            Oij[fila][col]++;
+        }
+
+        double[][] Eij = new double[n][n];
+        double esperado = (double) N / (n * n);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                Eij[i][j] = esperado;
+            }
+        }
+
+        double[][] diff = new double[n][n];
+
+        double[][] chi = new double[n][n];
+        double chiCuadrado = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                diff[i][j] = Oij[i][j] - Eij[i][j];
+                chi[i][j] = Math.pow(diff[i][j], 2) / Eij[i][j];
+                chiCuadrado += chi[i][j];
+            }
+        }
+
+        System.out.println("\nTabla Oij:");
+        System.out.printf("%20s", "");
+        for (int j = 0; j < n; j++) {
+            double intIni = j * intervalo;
+            double intFin = (j + 1) * intervalo;
+            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
+        }
+        System.out.println();
+        for (int i = 0; i < n; i++) {
+            double intIni = i * intervalo;
+            double intFin = (i + 1) * intervalo;
+            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
+            for (int j = 0; j < n; j++) {
+                System.out.printf("%15.2f", Oij[i][j]);
+            }
+            System.out.println();
+        }
+
+        System.out.println("\nTabla Eij:");
+        System.out.printf("%20s", "");
+        for (int j = 0; j < n; j++) {
+            double intIni = j * intervalo;
+            double intFin = (j + 1) * intervalo;
+            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
+        }
+        System.out.println();
+        for (int i = 0; i < n; i++) {
+            double intIni = i * intervalo;
+            double intFin = (i + 1) * intervalo;
+            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
+            for (int j = 0; j < n; j++) {
+                System.out.printf("%15.2f", Eij[i][j]);
+            }
+            System.out.println();
+        }
+
+        System.out.println("\nTabla (Oij - Eij):");
+        System.out.printf("%20s", "");
+        for (int j = 0; j < n; j++) {
+            double intIni = j * intervalo;
+            double intFin = (j + 1) * intervalo;
+            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
+        }
+        System.out.println();
+        for (int i = 0; i < n; i++) {
+            double intIni = i * intervalo;
+            double intFin = (i + 1) * intervalo;
+            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
+            for (int j = 0; j < n; j++) {
+                System.out.printf("%15.2f", diff[i][j]);
+            }
+            System.out.println();
+        }
+
+        System.out.println("\nTabla (Oij - Eij)^2 / Eij:");
+        System.out.printf("%20s", "");
+        for (int j = 0; j < n; j++) {
+            double intIni = j * intervalo;
+            double intFin = (j + 1) * intervalo;
+            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
+        }
+        System.out.println();
+        for (int i = 0; i < n; i++) {
+            double intIni = i * intervalo;
+            double intFin = (i + 1) * intervalo;
+            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
+            for (int j = 0; j < n; j++) {
+                System.out.printf("%15.4f", chi[i][j]);
+            }
+            System.out.println();
+        }
+
+        System.out.println("\n---------------------------------------------");
+        System.out.printf("Chi-cuadrado total: %.4f\n", chiCuadrado);
+        System.out.printf("Grados de libertad: %d\n", (n * n - 1));
+        System.out.println("---------------------------------------------");
     }
 
     public static void distancias(ArrayList<Float> numeros, Float alpha, Float theta) {
@@ -161,23 +291,34 @@ public class Modelo {
 
         new TablaDistancias(tabla);
 
-        ArrayList<Integer> i = new ArrayList<>();
+        ArrayList<Integer> listaArreglada = new ArrayList<>();
         for (RenglonDistancia r : tabla) {
-            if (r.getC() == 0 && (i.isEmpty() || i.get(i.size() - 1) != r.getI())) {
-                i.add(r.getI());
+            if (r.getI() != 0) {
+                listaArreglada.add(r.getI());
+            } else {
+                if (listaArreglada.isEmpty() || listaArreglada.get(listaArreglada.size() - 1) != 0) {
+                    listaArreglada.add(r.getI());
+                }
             }
         }
 
-        for (Integer integer : i) {
-            System.out.println(integer);
-        }
+        System.out.println("Oi sum: " + listaArreglada.size());
 
-
-        for (RenglonDistancia r : tabla) {
-            if (!i.contains(r.getI())) {
-                i.add(r.getI());
+        HashMap<Integer, Integer> listaUnicos = new HashMap<>();
+        for (Integer r : listaArreglada) {
+            if (!listaUnicos.containsKey(r)) {
+                listaUnicos.put(r, 0);
+            } else {
+                listaUnicos.put(r, listaUnicos.get(r) + 1);
             }
         }
+        AtomicInteger counter = new AtomicInteger(0);
+        listaUnicos.forEach((n, i) -> {
+            System.out.println(n + " " + i);
+            counter.addAndGet(i);
+        });
+
+        System.out.println(counter);
 
         ArrayList<TablaDistancia2> tabla2 = new ArrayList<>();
     }
