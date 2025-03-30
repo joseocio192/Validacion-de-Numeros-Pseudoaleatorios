@@ -247,6 +247,21 @@ public class Modelo {
         System.out.printf("Chi-cuadrado total: %.4f\n", chiCuadrado);
         System.out.printf("Grados de libertad: %d\n", (n * n - 1));
         System.out.println("---------------------------------------------");
+        String critInput = JOptionPane.showInputDialog("Ingrese el valor crítico de chi-cuadrado para df = " + (n * n - 1) + ":");
+        double crit;
+        try {
+            crit = Double.parseDouble(critInput);
+        } catch(NumberFormatException e) {
+            System.out.println("Valor crítico inválido. No se puede realizar la comparación.");
+            return;
+        }
+        System.out.println("---------------------------------------------");
+        if(chiCuadrado < crit) {
+            System.out.println("Chi-cuadrado calculado < valor crítico: se ACEPTA H0.");
+        } else {
+            System.out.println("Chi-cuadrado calculado >= valor crítico: se RECHAZA H0.");
+        }
+        System.out.println("---------------------------------------------");
     }
 
     public static String distancias(ArrayList<Float> numeros, Float alpha, Float theta) {
