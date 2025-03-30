@@ -1,16 +1,19 @@
 package com.mycompany.app.Model;
 
-public class TablaDistancia {
+public class RenglonDistancia {
     Integer n;
     float Ui;
     int c;
     int i;
 
-    public TablaDistancia(Integer n, float ui, int c, int i) {
+    public RenglonDistancia(Integer n, float ui, int c, int i) {
         this.n = n;
-        Ui = ui;
+        this.Ui = ui;
         this.c = c;
         this.i = i;
+    }
+
+    public RenglonDistancia() {
     }
 
     public Integer getN() {

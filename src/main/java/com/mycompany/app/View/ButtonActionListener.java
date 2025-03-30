@@ -19,13 +19,13 @@ public class ButtonActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (action) {
             case "jiCuadrado":
-                Modelo.ji_Cuadrado(vista.numeros);
+                Controller.procesarJi_Cuadrado(vista);
                 break;
             case "kolmogorovSmirnov":
-                Modelo.kolmogorov_Smirnov(vista.numeros);
+                Controller.procesaKolmogorov_Smirnov(vista);
                 break;
             case "series":
-                Modelo.series(vista.numeros);   
+                Controller.procesarSeries(vista);   
                 break;
             case "distancias":
                 Controller.procesarDistancias(vista);

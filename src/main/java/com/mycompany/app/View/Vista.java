@@ -56,8 +56,9 @@ public class Vista extends JFrame {
                 numeros = Controller.procesarArchivo(fileChooser.getSelectedFile().getAbsolutePath());
             }
             if (numeros == null) {
-                JOptionPane.showMessageDialog(null, "No se pudo procesar el archivo", "Error", JOptionPane.ERROR_MESSAGE);
-            }else{
+                JOptionPane.showMessageDialog(null, "No se pudo procesar el archivo", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 button.setEnabled(true);
                 button2.setEnabled(true);
                 button3.setEnabled(true);
