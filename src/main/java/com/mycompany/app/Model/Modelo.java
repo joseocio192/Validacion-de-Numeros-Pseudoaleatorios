@@ -82,23 +82,36 @@ public class Modelo {
     public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error ) {
         System.out.println("Metodo 2"); 
         int serie = numeros.size();
-        error = 5f;
-        double Fn = 1/serie;
+        double Fn = 1.0 / serie;
         float D = 0;
+
         for (int i = 0; i < serie; i++) {
-            float Fni =  (float) ((i + 1f) * Fn);
-            float Di = (float) Math.abs(Fni - Fn);
+            float Fni = (i + 1f) / serie;
+            float Di = Math.abs(Fni - numeros.get(i)); 
             if (Di > D) {
                 D = Di;
             }
         }
-       float Dx =  1.63f/ (float) Math.sqrt(serie);
-        if (D < Dx) {
-            return "No existe evidencia suficiente para decir que la muestra no esta distribuida uniformemente";
+        System.out.println("Error: " + error);
+
+        float Dx;
+        if (error == 0.10f) {
+            Dx = (float) (1.22 / Math.sqrt(serie));
+        } else if (error == 0.05f) {
+            Dx = (float) (1.36 / Math.sqrt(serie));
+        } else if (error == 0.01f) {
+            Dx = (float) (1.63 / Math.sqrt(serie));
         } else {
-            return "Existen evidencias suficientes para decir que la muestra no esta distribuida uniformemente"; 
+            return "El error no es correcto, debe ser 0.10, 0.05 o 0.01";
+        }
+
+        if (D > Dx) {
+            return "Existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
+        } else {
+            return "No existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
         }
     }
+
 
     public static void series(ArrayList<Float> numeros) {
         System.out.println("Metodo 3");
