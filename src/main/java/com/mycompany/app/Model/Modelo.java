@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.mycompany.app.View.TablaDistancias;
-
+import com.mycompany.app.Model.TablaJiCuadrado;
 public class Modelo {
 
     public static String ji_Cuadrado(ArrayList<Float> numeros) {
+
+        ArrayList<TablaJiCuadrado> tabla = new ArrayList<>();
         int N = numeros.size();
         // Determinar el número de intervalos
         int k = (int) Math.round(Math.sqrt(N));
@@ -30,7 +32,6 @@ public class Modelo {
             double diferencia = frecuenciasObservadas[i] - E;
             double contribucion = (diferencia * diferencia) / E;
             chiCuadrada += contribucion;
-           
         }
 
         // Obtener el valor crítico (aproximado)
