@@ -1,15 +1,19 @@
 package com.mycompany.app.Model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.mycompany.app.View.GraficaJiCuadrado;
 import com.mycompany.app.View.TablaDistancias;
+import com.mycompany.app.View.TablaDistancias2;
 import com.mycompany.app.View.TablaJiCuadrado;
 
 public class Modelo {
@@ -245,7 +249,7 @@ public class Modelo {
         System.out.println("---------------------------------------------");
     }
 
-    public static void distancias(ArrayList<Float> numeros, Float alpha, Float theta) {
+    public static String distancias(ArrayList<Float> numeros, Float alpha, Float theta) {
         System.out.println("Metodo distancias");
         float beta = alpha + theta;
         float PE = theta;
@@ -302,24 +306,94 @@ public class Modelo {
             }
         }
 
-        System.out.println("Oi sum: " + listaArreglada.size());
-
         HashMap<Integer, Integer> listaUnicos = new HashMap<>();
         for (Integer r : listaArreglada) {
             if (!listaUnicos.containsKey(r)) {
-                listaUnicos.put(r, 0);
+                listaUnicos.put(r, 1);
             } else {
                 listaUnicos.put(r, listaUnicos.get(r) + 1);
             }
         }
+
         AtomicInteger counter = new AtomicInteger(0);
         listaUnicos.forEach((n, i) -> {
-            System.out.println(n + " " + i);
             counter.addAndGet(i);
         });
 
-        System.out.println(counter);
+        ArrayList<RenglonDistancia2> tabla2 = new ArrayList<>();
+        AtomicReference<Float> sumaEimoicei = new AtomicReference<>(0f);
+        AtomicReference<Float> sumaEi = new AtomicReference<>(0f);
+        listaArreglada = new ArrayList<>(listaUnicos.keySet());
+        Collections.sort(listaArreglada);
+        for (Integer a : listaArreglada) {
+            System.out.println(a);
+        }
+        int max  = getLastConsecutive(listaArreglada) + 1;
+        System.out.println("max"+ max);
+        AtomicBoolean x = new AtomicBoolean(true);
+        listaUnicos.forEach((n, oi) -> {
+            RenglonDistancia2 r = new RenglonDistancia2();
+            r.setI(n);
+            r.setOi(oi);
+            float eii;
+            if (n == 0) {
+                eii = (float) (counter.get() * theta);
+                r.setPi(theta);
+                float Eimoicei = (float) Math.pow((eii - oi), 2) / eii;
+                sumaEimoicei.updateAndGet(v -> v + Eimoicei);
+                sumaEi.updateAndGet(v -> v + eii);
+                r.setEi(eii);
+                r.setEimoi(eii - oi);
+                r.setEimoicei(Eimoicei);
+                tabla2.add(r); 
+            }else if (n >= max && x.get()) {
+                float pi = (float) (Math.pow((1 - theta), max));
+                eii = (float) (counter.get() * Math.pow((1 - theta), max));
+                float Eimoicei = (float) Math.pow((eii - oi), 2) / eii;
+                sumaEimoicei.updateAndGet(v -> v + Eimoicei);
+                sumaEi.updateAndGet(v -> v + eii);
+                x.set(false);
+                r.setPi(pi);
+                r.setEi(eii);
+                r.setEimoi(eii - oi);
+                r.setEimoicei(Eimoicei);
+                tabla2.add(r);
+            } else {
+                float pi = (float) (Math.pow((1 - theta), n) * theta);
+                eii = (float) (counter.get() * Math.pow((1 - theta), n) * theta);
+                r.setPi(pi);
+                float Eimoicei = (float) Math.pow((eii - oi), 2) / eii;
+                sumaEimoicei.updateAndGet(v -> v + Eimoicei);
+                sumaEi.updateAndGet(v -> v + eii);
+                r.setEi(eii);
+                r.setEimoi(eii - oi);
+                r.setEimoicei(Eimoicei);
+                tabla2.add(r); 
+            }
+        });
+        for (RenglonDistancia2 renglonDistancia2 : tabla2) {
+            System.out.println(renglonDistancia2.toString());
+        }
+        System.out.println(sumaEi);
+        System.out.println(sumaEimoicei);
+        tabla2.add(new RenglonDistancia2(null, 1f, counter.get(), sumaEi.get(), null, sumaEimoicei.get()));
+        new TablaDistancias2(tabla2);
+        String mensaje = "";
+        double valorCritico = obtenerValorCritico(listaUnicos.size()-1);
+        mensaje = valorCritico +" "+ sumaEimoicei+ " "+ listaUnicos.size();
+        if (sumaEimoicei.get() > valorCritico) {
+            return "Existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
+        } else {
+            return "No existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
+        }
+    }
 
-        ArrayList<TablaDistancia2> tabla2 = new ArrayList<>();
+    public static int getLastConsecutive(ArrayList<Integer> datos) {
+        for (int i = 0; i < datos.size() - 1; i++) {
+            if (datos.get(i) + 1 != datos.get(i + 1)) {
+                return datos.get(i); // Return the last consecutive number before the break
+            }
+        }
+        return datos.get(datos.size() - 1); // If no break, return the last element
     }
 }

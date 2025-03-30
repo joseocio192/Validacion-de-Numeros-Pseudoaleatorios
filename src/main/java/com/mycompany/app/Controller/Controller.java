@@ -159,6 +159,7 @@ public class Controller {
                         JOptionPane.ERROR_MESSAGE);
             }
         } while (!validInput);
-        Modelo.distancias(vista.numeros, alpha, theta);
+        String mensaje =  Modelo.distancias(vista.numeros, alpha, theta);
+        JOptionPane.showMessageDialog(vista, mensaje, "Mensaje", JOptionPane.INFORMATION_MESSAGE);
     }
 }
