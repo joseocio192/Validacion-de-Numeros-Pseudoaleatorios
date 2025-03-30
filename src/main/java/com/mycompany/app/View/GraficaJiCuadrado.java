@@ -39,7 +39,6 @@ public class GraficaJiCuadrado extends JFrame {
         CategoryDataset dataset1 = createBarDataset();
         CategoryDataset dataset2 = createLineDataset();
 
-        // Crear gráfico de barras
         JFreeChart chart = ChartFactory.createBarChart(
                 "Gráfico JiCuadrado",
                 "Valores Intervalo",
@@ -50,22 +49,19 @@ public class GraficaJiCuadrado extends JFrame {
 
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
 
-        // Configurar barras
         BarRenderer barRenderer = new BarRenderer();
-        barRenderer.setSeriesPaint(0, new Color(255, 255, 128));  // Color amarillo claro
+        barRenderer.setSeriesPaint(0, new Color(255, 255, 128));
         plot.setRenderer(0, barRenderer);
 
-        // Configurar línea roja con puntos azules
         LineAndShapeRenderer lineRenderer = new LineAndShapeRenderer();
         lineRenderer.setSeriesPaint(0, Color.RED);
         lineRenderer.setSeriesShapesVisible(0, true);
-        lineRenderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(-3, -3, 6, 6)); // Puntos azules
+        lineRenderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(-3, -3, 6, 6));
 
         plot.setDataset(1, dataset2);
         plot.mapDatasetToRangeAxis(1, 0);
         plot.setRenderer(1, lineRenderer);
 
-        // Orden de renderizado: primero barras, luego la línea
         plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
 
         return chart;

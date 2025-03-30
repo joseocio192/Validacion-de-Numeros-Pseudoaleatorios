@@ -14,22 +14,18 @@ public class Modelo {
 
         ArrayList<RenglonJiCuadrado> tabla = new ArrayList<>();
         int N = numeros.size();
-        // Determinar el número de intervalos
         int k = (int) Math.round(Math.sqrt(N));
         double intervalo = 1.0 / k;
 
-        // Contar frecuencias observadas
         int[] frecuenciasObservadas = new int[k];
         for (double dato : numeros) {
             int indice = (int) (dato / intervalo);
-            if (indice == k) indice--; // Asegurar que el último valor cae en el último intervalo
+            if (indice == k) indice--; 
             frecuenciasObservadas[indice]++;
         }
 
-        // Calcular frecuencia esperada
         double E = (double) N / k;
 
-        // Calcular chi cuadrada
         double chiCuadrada = 0;
         for (int i = 0; i < k; i++) {
             RenglonJiCuadrado renglon = new RenglonJiCuadrado();
@@ -60,7 +56,6 @@ public class Modelo {
             chart.setVisible(true);
         });
 
-        // Obtener el valor crítico (aproximado)
         double valorCritico = obtenerValorCritico(k - 1);
 
         if (chiCuadrada < valorCritico) {
@@ -76,7 +71,7 @@ public class Modelo {
             Map.entry(6, 12.5916), Map.entry(7, 14.0671), Map.entry(8, 15.5073), Map.entry(9, 16.9190), Map.entry(10, 18.3070),
             Map.entry(11, 19.6752), Map.entry(12, 21.0261), Map.entry(13, 22.3620), Map.entry(14, 23.6848), Map.entry(15, 24.9958)
         );
-        return tablaChiCuadrada.getOrDefault(gl, 16.92); // Valor por defecto para gl desconocidos
+        return tablaChiCuadrada.getOrDefault(gl, 16.92);
     }
 
     public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error ) {
@@ -167,6 +162,17 @@ public class Modelo {
         new TablaDistancias(tabla);
 
         ArrayList<Integer> i = new ArrayList<>();
+        for (RenglonDistancia r : tabla) {
+            if (r.getC() == 0 && (i.isEmpty() || i.get(i.size() - 1) != r.getI())) {
+                i.add(r.getI());
+            }
+        }
+
+        for (Integer integer : i) {
+            System.out.println(integer);
+        }
+
+
         for (RenglonDistancia r : tabla) {
             if (!i.contains(r.getI())) {
                 i.add(r.getI());
