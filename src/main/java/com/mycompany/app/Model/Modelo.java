@@ -90,7 +90,6 @@ public class Modelo {
 
     public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error) {
         int serie = numeros.size();
-        double Fn = 1.0 / serie;
         float D = 0;
 
         ArrayList<RenglonKolmogorov> tabla = new ArrayList<>();
@@ -288,8 +287,6 @@ public class Modelo {
     public static String distancias(ArrayList<Float> numeros, Float alpha, Float theta) {
         System.out.println("Metodo distancias");
         float beta = alpha + theta;
-        float PE = theta;
-        float PF = 1f - theta;
         Integer ceros = 0;
         ArrayList<RenglonDistancia> tabla = new ArrayList<>();
         for (int i = 0; i < numeros.size() - 1; i++) {
@@ -414,9 +411,7 @@ public class Modelo {
         System.out.println(sumaEimoicei);
         tabla2.add(new RenglonDistancia2(null, 1f, counter.get(), sumaEi.get(), null, sumaEimoicei.get()));
         new TablaDistancias2(tabla2);
-        String mensaje = "";
         double valorCritico = obtenerValorCritico(listaUnicos.size()-1);
-        mensaje = valorCritico +" "+ sumaEimoicei+ " "+ listaUnicos.size();
         if (sumaEimoicei.get() > valorCritico) {
             return "Existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
         } else {

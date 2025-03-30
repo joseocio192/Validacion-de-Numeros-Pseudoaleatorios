@@ -1,11 +1,9 @@
 package com.mycompany.app.View;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 
 import com.mycompany.app.Controller.Controller;
