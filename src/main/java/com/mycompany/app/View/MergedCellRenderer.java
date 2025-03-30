@@ -15,7 +15,7 @@ class MergedCellRenderer extends DefaultTableCellRenderer {
         mergeIndexes = new ArrayList<>();
         for (int i = 0; i < tabla.size(); i++) {
             if (tabla.get(i).getI() > 0) {
-                mergeIndexes.add(i); // Only display "i" where it starts
+                mergeIndexes.add(i);
             }
         }
     }

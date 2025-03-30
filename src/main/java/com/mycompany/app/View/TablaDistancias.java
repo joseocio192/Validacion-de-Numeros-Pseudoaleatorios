@@ -25,7 +25,7 @@ public class TablaDistancias extends JFrame {
         DefaultTableModel model = new DefaultTableModel(columns, 0);
     
         for (RenglonDistancia row : tabla) {
-            Object iValue = (row.getI() > 0) ? row.getI() : "";
+            Object iValue = (row.getI() > 0) ? row.getI() : "0";
             model.addRow(new Object[]{row.getN(), row.getUi(), row.getC(), iValue});
         }
     
@@ -42,7 +42,7 @@ public class TablaDistancias extends JFrame {
             }
         });
 
-        table.setEnabled(false);
+        //table.setEnabled(false);
         table.getColumnModel().getColumn(3).setCellRenderer(new MergedCellRenderer(tabla));
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane);
