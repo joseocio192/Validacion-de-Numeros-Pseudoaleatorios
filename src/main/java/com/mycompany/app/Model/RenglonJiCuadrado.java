@@ -1,16 +1,16 @@
 package com.mycompany.app.Model;
 
-public class TablaJiCuadrado {
-    float i;
+public class RenglonJiCuadrado {
+    Double i;
     Integer o;
-    Float e;
-    Float ome;
-    Float eso;
+    Double e;
+    Double ome;
+    Double eso;
 
-    public TablaJiCuadrado() {
+    public RenglonJiCuadrado() {
     }
 
-    public TablaJiCuadrado(float i, Integer o, Float e, Float ome, Float eso) {
+    public RenglonJiCuadrado(Double i, Integer o, Double e, Double ome, Double eso) {
         this.i = i;
         this.o = o;
         this.e = e;
@@ -18,10 +18,10 @@ public class TablaJiCuadrado {
         this.eso = eso;
     }
 
-    public float getI() {
+    public Double getI() {
         return i;
     }
-    public void setI(float i) {
+    public void setI(double i) {
         this.i = i;
     }
     public Integer getO() {
@@ -30,22 +30,22 @@ public class TablaJiCuadrado {
     public void setO(Integer o) {
         this.o = o;
     }
-    public Float getE() {
+    public Double getE() {
         return e;
     }
-    public void setE(Float e) {
+    public void setE(Double e) {
         this.e = e;
     }
-    public Float getOme() {
+    public Double getOme() {
         return ome;
     }
-    public void setOme(Float ome) {
+    public void setOme(Double ome) {
         this.ome = ome;
     }
-    public Float getEso() {
+    public Double getEso() {
         return eso;
     }
-    public void setEso(Float eso) {
+    public void setEso(Double eso) {
         this.eso = eso;
     }
 }

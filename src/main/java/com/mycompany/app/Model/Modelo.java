@@ -3,13 +3,16 @@ package com.mycompany.app.Model;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
+import com.mycompany.app.View.GraficaJiCuadrado;
 import com.mycompany.app.View.TablaDistancias;
-import com.mycompany.app.Model.TablaJiCuadrado;
+import com.mycompany.app.View.TablaJiCuadrado;
 public class Modelo {
 
     public static String ji_Cuadrado(ArrayList<Float> numeros) {
 
-        ArrayList<TablaJiCuadrado> tabla = new ArrayList<>();
+        ArrayList<RenglonJiCuadrado> tabla = new ArrayList<>();
         int N = numeros.size();
         // Determinar el número de intervalos
         int k = (int) Math.round(Math.sqrt(N));
@@ -29,16 +32,39 @@ public class Modelo {
         // Calcular chi cuadrada
         double chiCuadrada = 0;
         for (int i = 0; i < k; i++) {
+            RenglonJiCuadrado renglon = new RenglonJiCuadrado();
             double diferencia = frecuenciasObservadas[i] - E;
             double contribucion = (diferencia * diferencia) / E;
             chiCuadrada += contribucion;
+            renglon.setI((i+1)*(intervalo));
+            renglon.setO(frecuenciasObservadas[i]);
+            renglon.setE(E);
+            renglon.setOme(diferencia);
+            renglon.setEso(contribucion);
+            tabla.add(renglon);
         }
+        new TablaJiCuadrado(tabla);
+
+        
+        double[] categorias = new double[tabla.size()];
+        for (int i = 0; i < tabla.size(); i++) {
+            categorias[i] = tabla.get(i).getI();
+        }
+        double[] o = new double[tabla.size()];
+        for (int i = 0; i < tabla.size(); i++) {
+            o[i] = tabla.get(i).getO();
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            GraficaJiCuadrado chart = new GraficaJiCuadrado(categorias, o, E);
+            chart.setVisible(true);
+        });
 
         // Obtener el valor crítico (aproximado)
         double valorCritico = obtenerValorCritico(k - 1);
 
         if (chiCuadrada < valorCritico) {
-           return "No existe evidencia suficiente para sustentar que los datos no estan distribuidos uniformemente.";
+            return "No existe evidencia suficiente para sustentar que los datos no estan distribuidos uniformemente.";
         } else {
             return "Existe evidencia suficiente para sustentar que los datos no estan distribuidos uniformemente.";
         }
