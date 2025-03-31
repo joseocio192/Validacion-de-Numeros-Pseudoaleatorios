@@ -3,7 +3,6 @@ package com.mycompany.app.Model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -79,14 +78,11 @@ public class Modelo {
     }
 
     public static double obtenerValorCritico(int gl) {
-        Map<Integer, Double> tablaChiCuadrada = Map.ofEntries(
-                Map.entry(1, 3.8415), Map.entry(2, 5.9915), Map.entry(3, 7.8147), Map.entry(4, 9.4877),
-                Map.entry(5, 11.0705),
-                Map.entry(6, 12.5916), Map.entry(7, 14.0671), Map.entry(8, 15.5073), Map.entry(9, 16.9190),
-                Map.entry(10, 18.3070),
-                Map.entry(11, 19.6752), Map.entry(12, 21.0261), Map.entry(13, 22.3620), Map.entry(14, 23.6848),
-                Map.entry(15, 24.9958));
-        return tablaChiCuadrada.getOrDefault(gl, 16.92);
+        double [] tablaChi = {3.841, 5.991, 7.815, 9.488, 11.070, 12.592,	14.067, 15.507,	16.919,	18.307, 19.675, 21.026, 22.362, 23.685, 24.996,
+            26.296, 27.587, 28.869, 30.144, 31.410, 32.671, 33.924, 35.172, 36.415, 37.652,
+            38.885, 40.113, 41.337, 42.557, 43.773, 44.985, 46.194, 47.400, 48.602, 49.802,
+            55.758, 67.500, 79.1, 124.3};
+        return tablaChi [gl];
     }
 
     public static String kolmogorov_Smirnov(ArrayList<Float> numeros, Float error) {
