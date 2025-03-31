@@ -6,10 +6,10 @@ import java.awt.*;
 
 public class TablaGenerica extends JFrame {
 
-    public TablaGenerica(String title, double[][] data, String[] headers) {
+    public TablaGenerica(String title, double[][] data, String[] headers, Integer[] ubicacion) {
         super(title);
         setSize(600, 400);
-        setLocationRelativeTo(null);
+        setLocation(ubicacion[0], ubicacion[1]);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         DefaultTableModel model = new DefaultTableModel();
