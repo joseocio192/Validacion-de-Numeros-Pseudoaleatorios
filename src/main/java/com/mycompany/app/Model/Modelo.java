@@ -17,6 +17,7 @@ import com.mycompany.app.View.GraficaJiCuadrado;
 import com.mycompany.app.View.LineChartkolmogorov_Smirnov;
 import com.mycompany.app.View.TablaDistancias;
 import com.mycompany.app.View.TablaDistancias2;
+import com.mycompany.app.View.TablaGenerica;
 import com.mycompany.app.View.TablaJiCuadrado;
 import com.mycompany.app.View.TablaKolmogorv;
 
@@ -137,7 +138,7 @@ public class Modelo {
         }
     }
 
-    public static void series(ArrayList<Float> nums) {
+ public static void series(ArrayList<Float> nums) {
         System.out.println("Metodo 3 - Prueba de Series");
         if (nums.size() < 2) {
             System.out.println("No hay suficientes datos.");
@@ -157,20 +158,24 @@ public class Modelo {
             return;
         }
 
-        int N = nums.size() - 1;
+        int N = nums.size() - 1; 
         double intervalo = 1.0 / n;
+
 
         double[][] Oij = new double[n][n];
         for (int i = 0; i < N; i++) {
             int fila = (int) (nums.get(i) / intervalo);
             int col = (int) (nums.get(i + 1) / intervalo);
-            if (fila >= n)
+            if (fila >= n) {
                 fila = n - 1;
-            if (col >= n)
+            }
+            if (col >= n) {
                 col = n - 1;
+            }
             Oij[fila][col]++;
         }
 
+  
         double[][] Eij = new double[n][n];
         double esperado = (double) N / (n * n);
         for (int i = 0; i < n; i++) {
@@ -179,8 +184,8 @@ public class Modelo {
             }
         }
 
+     
         double[][] diff = new double[n][n];
-
         double[][] chi = new double[n][n];
         double chiCuadrado = 0;
         for (int i = 0; i < n; i++) {
@@ -191,99 +196,42 @@ public class Modelo {
             }
         }
 
-        System.out.println("\nTabla Oij:");
-        System.out.printf("%20s", "");
+  
+        String[] headers = new String[n];
         for (int j = 0; j < n; j++) {
-            double intIni = j * intervalo;
-            double intFin = (j + 1) * intervalo;
-            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
-        }
-        System.out.println();
-        for (int i = 0; i < n; i++) {
-            double intIni = i * intervalo;
-            double intFin = (i + 1) * intervalo;
-            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
-            for (int j = 0; j < n; j++) {
-                System.out.printf("%15.2f", Oij[i][j]);
-            }
-            System.out.println();
+            double ini = j * intervalo;
+            double fin = (j + 1) * intervalo;
+            headers[j] = String.format("[%.2f - %.2f)", ini, fin);
         }
 
-        System.out.println("\nTabla Eij:");
-        System.out.printf("%20s", "");
-        for (int j = 0; j < n; j++) {
-            double intIni = j * intervalo;
-            double intFin = (j + 1) * intervalo;
-            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
-        }
-        System.out.println();
-        for (int i = 0; i < n; i++) {
-            double intIni = i * intervalo;
-            double intFin = (i + 1) * intervalo;
-            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
-            for (int j = 0; j < n; j++) {
-                System.out.printf("%15.2f", Eij[i][j]);
-            }
-            System.out.println();
-        }
+  
+        TablaGenerica tablaOij = new TablaGenerica("Tabla Oij", Oij, headers);
+        tablaOij.setVisible(true);
 
-        System.out.println("\nTabla (Oij - Eij):");
-        System.out.printf("%20s", "");
-        for (int j = 0; j < n; j++) {
-            double intIni = j * intervalo;
-            double intFin = (j + 1) * intervalo;
-            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
-        }
-        System.out.println();
-        for (int i = 0; i < n; i++) {
-            double intIni = i * intervalo;
-            double intFin = (i + 1) * intervalo;
-            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
-            for (int j = 0; j < n; j++) {
-                System.out.printf("%15.2f", diff[i][j]);
-            }
-            System.out.println();
-        }
+        TablaGenerica tablaEij = new TablaGenerica("Tabla Eij", Eij, headers);
+        tablaEij.setVisible(true);
 
-        System.out.println("\nTabla (Oij - Eij)^2 / Eij:");
-        System.out.printf("%20s", "");
-        for (int j = 0; j < n; j++) {
-            double intIni = j * intervalo;
-            double intFin = (j + 1) * intervalo;
-            System.out.printf("%15s", String.format("[%.2f-%.2f)", intIni, intFin));
-        }
-        System.out.println();
-        for (int i = 0; i < n; i++) {
-            double intIni = i * intervalo;
-            double intFin = (i + 1) * intervalo;
-            System.out.printf("%20s", String.format("[%.2f-%.2f)", intIni, intFin));
-            for (int j = 0; j < n; j++) {
-                System.out.printf("%15.4f", chi[i][j]);
-            }
-            System.out.println();
-        }
+        TablaGenerica tablaDiff = new TablaGenerica("Tabla (Oij - Eij)", diff, headers);
+        tablaDiff.setVisible(true);
 
-        System.out.println("\n---------------------------------------------");
-        System.out.printf("Chi-cuadrado total: %.4f\n", chiCuadrado);
-        System.out.printf("Grados de libertad: %d\n", (n * n - 1));
-        System.out.println("---------------------------------------------");
-        String critInput = JOptionPane.showInputDialog("Ingrese el valor crítico de chi-cuadrado para df = " + (n * n - 1) + ":");
-        double crit;
-        try {
-            crit = Double.parseDouble(critInput);
-        } catch(NumberFormatException e) {
-            System.out.println("Valor crítico inválido. No se puede realizar la comparación.");
-            return;
-        }
-        System.out.println("---------------------------------------------");
-        if(chiCuadrado < crit) {
-            System.out.println("Chi-cuadrado calculado < valor crítico: se ACEPTA H0.");
+        TablaGenerica tablaChi = new TablaGenerica("Tabla (Oij - Eij)^2 / Eij", chi, headers);
+        tablaChi.setVisible(true);
+
+   
+        JOptionPane.showMessageDialog(null, "Chi-cuadrado total: " + String.format("%.4f", chiCuadrado));
+        JOptionPane.showMessageDialog(null, "Grados de libertad: " + (n * n - 1));
+
+    
+        int gl = n * n - 1;
+        double critico = obtenerValorCritico(gl);
+        String mensaje;
+        if (chiCuadrado < critico) {
+            mensaje = "Chi-cuadrado calculado < valor crítico: se ACEPTA H0.";
         } else {
-            System.out.println("Chi-cuadrado calculado >= valor crítico: se RECHAZA H0.");
+            mensaje = "Chi-cuadrado calculado >= valor crítico: se RECHAZA H0.";
         }
-        System.out.println("---------------------------------------------");
+        JOptionPane.showMessageDialog(null, mensaje);
     }
-
     public static String distancias(ArrayList<Float> numeros, Float alpha, Float theta) {
         System.out.println("Metodo distancias");
         float beta = alpha + theta;
