@@ -204,19 +204,19 @@ public class Modelo {
             headers[j] = String.format("[%.2f - %.2f)", ini, fin);
         }
 
-        Integer[] ubicacion1 = {0,200};
+        Integer[] ubicacion1 = {100,100};
         TablaGenerica tablaOij = new TablaGenerica("Tabla Oij", Oij, headers, ubicacion1);
         tablaOij.setVisible(true);
-        ubicacion1[0] = 0;
-        ubicacion1[1] = 500;
+        ubicacion1[0] = 700;
+        ubicacion1[1] = 100;
         TablaGenerica tablaEij = new TablaGenerica("Tabla Eij", Eij, headers,ubicacion1);
         tablaEij.setVisible(true);
-        ubicacion1[0] = 500;
-        ubicacion1[1] = 0;
+        ubicacion1[0] = 100;
+        ubicacion1[1] = 550;
         TablaGenerica tablaDiff = new TablaGenerica("Tabla (Oij - Eij)", diff, headers,ubicacion1);
         tablaDiff.setVisible(true);
-        ubicacion1[0] = 500;
-        ubicacion1[1] = 500;
+        ubicacion1[0] = 700;
+        ubicacion1[1] = 550;
         TablaGenerica tablaChi = new TablaGenerica("Tabla (Oij - Eij)^2 / Eij", chi, headers,ubicacion1);
         tablaChi.setVisible(true);
 
