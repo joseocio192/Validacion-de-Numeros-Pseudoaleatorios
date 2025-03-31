@@ -226,9 +226,9 @@ public class Modelo {
         double critico = obtenerValorCritico(gl);
         String mensaje;
         if (chiCuadrado < critico) {
-            mensaje = "Chi-cuadrado calculado < valor crítico: se ACEPTA H0.";
+            mensaje = "Existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
         } else {
-            mensaje = "Chi-cuadrado calculado >= valor crítico: se RECHAZA H0.";
+            mensaje = "No existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
         }
         JOptionPane.showMessageDialog(null, mensaje);
     }
