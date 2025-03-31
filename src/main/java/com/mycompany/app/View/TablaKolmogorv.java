@@ -18,7 +18,7 @@ public class TablaKolmogorv extends JFrame {
     };
 
     public void Interfaz() {
-        setTitle("Tabla distancias");
+        setTitle("Tabla Kolmogorov");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(300, 600);
         String[] columns = {"i", "Ui", "Fi", "Di"};
