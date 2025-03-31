@@ -47,11 +47,4 @@ public class LineChartkolmogorov_Smirnov extends JFrame {
         ChartPanel panel = new ChartPanel(chart);
         setContentPane(panel);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            LineChartkolmogorov_Smirnov example = new LineChartkolmogorov_Smirnov(null, null);
-            example.setVisible(true);
-        });
-    }
 }
