@@ -122,7 +122,7 @@ public class Controller {
     
     public static void procesarSeries(Vista vista) {
         ArrayList<Float> numeros = vista.numeros;
-        numeros.sort(Float::compareTo);
+     
         Modelo.series(numeros);
     }
 

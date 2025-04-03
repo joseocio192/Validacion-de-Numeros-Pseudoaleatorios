@@ -140,7 +140,7 @@ public class Modelo {
             System.out.println("No hay suficientes datos.");
             return;
         }
-        Collections.shuffle(nums);
+     
     
         String input = JOptionPane.showInputDialog("Ingrese el valor de n (divisiones del intervalo [0,1]):");
         int n;
@@ -158,10 +158,10 @@ public class Modelo {
         int N = nums.size() - 1; 
     double intervalo = 1.0 / n;
 
-    // Inicializar la matriz Oij
+
     double[][] Oij = new double[n][n];
 
-    // Recorrer pares consecutivos (Xi, Xi+1)
+  
     for (int i = 0; i < N; i++) {
         float num1 = nums.get(i);
         float num2 = nums.get(i + 1);
@@ -169,16 +169,16 @@ public class Modelo {
         int fila = (int) Math.floor(num1 / intervalo);
         int col = (int) Math.floor(num2 / intervalo);
 
-        // Asegurar que los índices no excedan n-1
+     
         fila = Math.min(fila, n - 1);
         col = Math.min(col, n - 1);
 
-        // Depuración: imprimir valores antes de agregar a la matriz
+      
         System.out.println("Par (" + num1 + ", " + num2 + ") -> Indices [" + fila + "][" + col + "]");
 
         Oij[fila][col]++;
     }
-    // Agregar el par circular: (último, primer elemento)
+  
 int filaCircular = (int) Math.floor(nums.get(nums.size() - 1) / intervalo);
 int colCircular = (int) Math.floor(nums.get(0) / intervalo);
 filaCircular = Math.min(filaCircular, n - 1);
@@ -186,7 +186,7 @@ colCircular = Math.min(colCircular, n - 1);
 System.out.println("Par circular (" + nums.get(nums.size()-1) + ", " + nums.get(0) + ") -> Indices [" + filaCircular + "][" + colCircular + "]");
 Oij[filaCircular][colCircular]++;
 
-    // Imprimir la matriz Oij para depuración
+  
     System.out.println("Matriz Oij:");
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -195,7 +195,7 @@ Oij[filaCircular][colCircular]++;
         System.out.println();
     }
     
-        // Crear matriz esperada Eij con valores esperados
+       
         double[][] Eij = new double[n][n];
         double esperado = (double) N / (n * n);
         for (int i = 0; i < n; i++) {
@@ -204,7 +204,7 @@ Oij[filaCircular][colCircular]++;
             }
         }
     
-        // Calcular chi-cuadrado
+     
         double[][] diff = new double[n][n];
         double[][] chi = new double[n][n];
         double chiCuadrado = 0;
@@ -216,7 +216,7 @@ Oij[filaCircular][colCircular]++;
             }
         }
     
-        // Crear encabezados para la tabla
+     
         String[] headers = new String[n];
         for (int j = 0; j < n; j++) {
             double ini = j * intervalo;
@@ -224,7 +224,7 @@ Oij[filaCircular][colCircular]++;
             headers[j] = String.format("[%.2f - %.2f)", ini, fin);
         }
     
-        // Mostrar las tablas
+  
         Integer[] ubicacion1 = {100,100};
         new TablaGenerica("Tabla Oij", Oij, headers, ubicacion1).setVisible(true);
         ubicacion1[0] = 700;
@@ -235,11 +235,11 @@ Oij[filaCircular][colCircular]++;
         ubicacion1[0] = 700;
         new TablaGenerica("Tabla (Oij - Eij)^2 / Eij", chi, headers, ubicacion1).setVisible(true);
     
-        // Mostrar el valor de chi-cuadrado
+     
         JOptionPane.showMessageDialog(null, "Chi-cuadrado total: " + String.format("%.4f", chiCuadrado));
         JOptionPane.showMessageDialog(null, "Grados de libertad: " + (n * n - 1));
     
-        // Comparar con el valor crítico
+     
         int gl = n * n - 1;
         double critico = obtenerValorCritico(gl);
         String mensaje = (chiCuadrado < critico) 
