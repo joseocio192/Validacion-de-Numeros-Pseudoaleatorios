@@ -138,13 +138,14 @@ public class Modelo {
         }
     }
 
- public static void series(ArrayList<Float> nums) {
+    public static void series(ArrayList<Float> nums) {
         System.out.println("Metodo 3 - Prueba de Series");
         if (nums.size() < 2) {
             System.out.println("No hay suficientes datos.");
             return;
         }
-
+        Collections.shuffle(nums);
+    
         String input = JOptionPane.showInputDialog("Ingrese el valor de n (divisiones del intervalo [0,1]):");
         int n;
         try {
@@ -157,25 +158,48 @@ public class Modelo {
             System.out.println("Valor inválido para n.");
             return;
         }
-
+    
         int N = nums.size() - 1; 
-        double intervalo = 1.0 / n;
+    double intervalo = 1.0 / n;
 
+    // Inicializar la matriz Oij
+    double[][] Oij = new double[n][n];
 
-        double[][] Oij = new double[n][n];
-        for (int i = 0; i < N; i++) {
-            int fila = (int) (nums.get(i) / intervalo);
-            int col = (int) (nums.get(i + 1) / intervalo);
-            if (fila >= n) {
-                fila = n - 1;
-            }
-            if (col >= n) {
-                col = n - 1;
-            }
-            Oij[fila][col]++;
+    // Recorrer pares consecutivos (Xi, Xi+1)
+    for (int i = 0; i < N; i++) {
+        float num1 = nums.get(i);
+        float num2 = nums.get(i + 1);
+
+        int fila = (int) Math.floor(num1 / intervalo);
+        int col = (int) Math.floor(num2 / intervalo);
+
+        // Asegurar que los índices no excedan n-1
+        fila = Math.min(fila, n - 1);
+        col = Math.min(col, n - 1);
+
+        // Depuración: imprimir valores antes de agregar a la matriz
+        System.out.println("Par (" + num1 + ", " + num2 + ") -> Indices [" + fila + "][" + col + "]");
+
+        Oij[fila][col]++;
+    }
+    // Agregar el par circular: (último, primer elemento)
+int filaCircular = (int) Math.floor(nums.get(nums.size() - 1) / intervalo);
+int colCircular = (int) Math.floor(nums.get(0) / intervalo);
+filaCircular = Math.min(filaCircular, n - 1);
+colCircular = Math.min(colCircular, n - 1);
+System.out.println("Par circular (" + nums.get(nums.size()-1) + ", " + nums.get(0) + ") -> Indices [" + filaCircular + "][" + colCircular + "]");
+Oij[filaCircular][colCircular]++;
+
+    // Imprimir la matriz Oij para depuración
+    System.out.println("Matriz Oij:");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            System.out.print(Oij[i][j] + "\t");
         }
-
-  
+        System.out.println();
+    }
+    
+        // Crear matriz esperada Eij con valores esperados
         double[][] Eij = new double[n][n];
         double esperado = (double) N / (n * n);
         for (int i = 0; i < n; i++) {
@@ -183,8 +207,8 @@ public class Modelo {
                 Eij[i][j] = esperado;
             }
         }
-
-     
+    
+        // Calcular chi-cuadrado
         double[][] diff = new double[n][n];
         double[][] chi = new double[n][n];
         double chiCuadrado = 0;
@@ -195,44 +219,36 @@ public class Modelo {
                 chiCuadrado += chi[i][j];
             }
         }
-
-  
+    
+        // Crear encabezados para la tabla
         String[] headers = new String[n];
         for (int j = 0; j < n; j++) {
             double ini = j * intervalo;
             double fin = (j + 1) * intervalo;
             headers[j] = String.format("[%.2f - %.2f)", ini, fin);
         }
-
+    
+        // Mostrar las tablas
         Integer[] ubicacion1 = {100,100};
-        TablaGenerica tablaOij = new TablaGenerica("Tabla Oij", Oij, headers, ubicacion1);
-        tablaOij.setVisible(true);
+        new TablaGenerica("Tabla Oij", Oij, headers, ubicacion1).setVisible(true);
         ubicacion1[0] = 700;
-        ubicacion1[1] = 100;
-        TablaGenerica tablaEij = new TablaGenerica("Tabla Eij", Eij, headers,ubicacion1);
-        tablaEij.setVisible(true);
+        new TablaGenerica("Tabla Eij", Eij, headers, ubicacion1).setVisible(true);
         ubicacion1[0] = 100;
         ubicacion1[1] = 550;
-        TablaGenerica tablaDiff = new TablaGenerica("Tabla (Oij - Eij)", diff, headers,ubicacion1);
-        tablaDiff.setVisible(true);
+        new TablaGenerica("Tabla (Oij - Eij)", diff, headers, ubicacion1).setVisible(true);
         ubicacion1[0] = 700;
-        ubicacion1[1] = 550;
-        TablaGenerica tablaChi = new TablaGenerica("Tabla (Oij - Eij)^2 / Eij", chi, headers,ubicacion1);
-        tablaChi.setVisible(true);
-
-   
+        new TablaGenerica("Tabla (Oij - Eij)^2 / Eij", chi, headers, ubicacion1).setVisible(true);
+    
+        // Mostrar el valor de chi-cuadrado
         JOptionPane.showMessageDialog(null, "Chi-cuadrado total: " + String.format("%.4f", chiCuadrado));
         JOptionPane.showMessageDialog(null, "Grados de libertad: " + (n * n - 1));
-
     
+        // Comparar con el valor crítico
         int gl = n * n - 1;
         double critico = obtenerValorCritico(gl);
-        String mensaje;
-        if (chiCuadrado < critico) {
-            mensaje = "Existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
-        } else {
-            mensaje = "No existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
-        }
+        String mensaje = (chiCuadrado < critico) 
+            ? "Existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente"
+            : "No existe evidencia suficiente para decir que la muestra NO está distribuida uniformemente";
         JOptionPane.showMessageDialog(null, mensaje);
     }
     public static String distancias(ArrayList<Float> numeros, Float alpha, Float theta) {
