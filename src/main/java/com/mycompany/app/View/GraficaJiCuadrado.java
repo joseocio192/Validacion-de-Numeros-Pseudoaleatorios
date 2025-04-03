@@ -86,8 +86,4 @@ public class GraficaJiCuadrado extends JFrame {
 
         return dataset;
     }
-
-    public static void main(String[] args) {
-        
-    }
 }
